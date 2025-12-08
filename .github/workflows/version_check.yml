@@ -2,46 +2,61 @@ name: VersionCheck
 on:
   merge_group:
   pull_request:
-    branches: [master, refactoring]
+    branches: [main]
     paths:
       - app/src/**
+      - api/src/**
       - build.gradle.kts
       - gradle.properties
-      - settings.gradle
+      - settings.gradle.kts
 
 jobs:
   check-version:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Setup Java 17
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@v4
         with:
           distribution: zulu
           java-version: 17
-      - name: Build with Gradle
-        uses: gradle/actions/setup-gradle@v3
-      - name: Checkout code
-        uses: actions/checkout@v3
+          
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
       - name: Get version from PR
         id: get-pr-version
         run: |
-          chmod +x ${{github.workspace}}/gradlew
-          echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q app:printVersionCode)"
-      - name: Get current version from main branch
+          chmod +x ./gradlew
+          echo "VERSION_CODE=$(./gradlew -q app:printVersionCode)" >> $GITHUB_OUTPUT
+
+      - name: Get current version from target branch
         id: get-current-version
         run: |
-          git fetch origin refactoring
-          git checkout refactoring
+          TARGET_BRANCH=${{ github.base_ref || 'main' }}
+          echo "Checking against branch: $TARGET_BRANCH"
+          git checkout origin/$TARGET_BRANCH
           chmod +x ./gradlew
-          echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q app:printVersionCode)"
+          echo "VERSION_CODE=$(./gradlew -q app:printVersionCode)" >> $GITHUB_OUTPUT
+
       - name: Compare versions
         id: compare-versions
         run: |
-          if [ ${{steps.get-pr-version.outputs.VERSION_NAME}} -le ${{steps.get-current-version.outputs.VERSION_NAME}} ]
-          then
-            echo "The version in the PR ${{steps.get-pr-version.outputs.VERSION_NAME}} is not higher than the current version ${{steps.get-current-version.outputs.VERSION_NAME}}."
-            echo "Please increase the debug version number."
+          PR_VER=${{ steps.get-pr-version.outputs.VERSION_CODE }}
+          CUR_VER=${{ steps.get-current-version.outputs.VERSION_CODE }}
+          
+          echo "PR Version Code: $PR_VER"
+          echo "Current Branch Version Code: $CUR_VER"
+          
+          if [ "$PR_VER" -le "$CUR_VER" ]; then
+            echo "Error: The version code in the PR ($PR_VER) is not higher than the current version ($CUR_VER)."
+            echo "Please increase the versionCode in app/build.gradle.kts."
             exit 1
+          else
+            echo "Version check passed."
           fi
