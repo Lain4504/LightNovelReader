@@ -4,6 +4,9 @@ import kotlinx.serialization.Serializable
 
 object Route {
     @Serializable
+    object Onboarding
+    
+    @Serializable
     object Main {
         @Serializable
         object Reading {

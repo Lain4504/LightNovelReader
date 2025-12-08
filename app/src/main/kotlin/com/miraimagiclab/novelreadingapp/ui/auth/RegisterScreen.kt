@@ -52,6 +52,17 @@ fun RegisterScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Box(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            TextButton(
+                onClick = onNavigateToLogin,
+                modifier = Modifier.align(Alignment.TopEnd)
+            ) {
+                Text("Bỏ qua")
+            }
+        }
+
         Text(
             text = "Đăng Ký",
             style = MaterialTheme.typography.displaySmall,
