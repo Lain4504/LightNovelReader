@@ -32,6 +32,9 @@ fun NavGraphBuilder.authDestination() {
             },
             onLoginSuccess = {
                 navController.popBackStack()
+            },
+            onNavigateBack = {
+                navController.popBackStack()
             }
         )
     }

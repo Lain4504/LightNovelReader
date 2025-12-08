@@ -15,10 +15,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.compose.material.icons.Icons
 import androidx.compose.ui.res.painterResource
 import com.miraimagiclab.novelreadingapp.R
 
@@ -29,7 +27,8 @@ fun LoginScreen(
     viewModel: AuthViewModel = hiltViewModel(),
     onNavigateToRegister: () -> Unit,
     onNavigateToForgotPassword: () -> Unit,
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    onNavigateBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
@@ -50,18 +49,14 @@ fun LoginScreen(
             .padding(24.dp)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
-        Box(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            TextButton(
-                onClick = onLoginSuccess,
-                modifier = Modifier.align(Alignment.TopEnd)
-            ) {
-                Text("Bỏ qua")
-            }
-        }
+        AuthTopBar(
+            onBack = onNavigateBack,
+            onSkip = onLoginSuccess
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = "Đăng Nhập",

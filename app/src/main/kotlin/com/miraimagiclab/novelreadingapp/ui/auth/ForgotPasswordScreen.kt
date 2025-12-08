@@ -70,8 +70,14 @@ fun ForgotPasswordScreen(
             .padding(24.dp)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
+        AuthTopBar(
+            onBack = onNavigateToLogin
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
         Text(
             text = "Quên Mật Khẩu",
             style = MaterialTheme.typography.displaySmall,

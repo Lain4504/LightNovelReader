@@ -50,18 +50,14 @@ fun RegisterScreen(
             .padding(24.dp)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
-        Box(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            TextButton(
-                onClick = onNavigateToLogin,
-                modifier = Modifier.align(Alignment.TopEnd)
-            ) {
-                Text("Bỏ qua")
-            }
-        }
+        AuthTopBar(
+            onBack = onNavigateToLogin,
+            onSkip = onNavigateToLogin
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = "Đăng Ký",
