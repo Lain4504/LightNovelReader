@@ -52,6 +52,17 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Box(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            TextButton(
+                onClick = onLoginSuccess,
+                modifier = Modifier.align(Alignment.TopEnd)
+            ) {
+                Text("Bỏ qua")
+            }
+        }
+
         Text(
             text = "Đăng Nhập",
             style = MaterialTheme.typography.displaySmall,

@@ -39,12 +39,14 @@ class MainActivity : ComponentActivity() {
     @Inject lateinit var userDataRepository: UserDataRepository
     @Inject lateinit var workManager: WorkManager
     @Inject lateinit var inAppUpdateRepository: InAppUpdateRepository
+    @Inject lateinit var tokenStorage: TokenStorage
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Thread.setDefaultUncaughtExceptionHandler(LogUtils(applicationContext, loggerRepository))
-        var appLocale by mutableStateOf("${Locale.current.platformLocale.language}-${Locale.current.platformLocale.variant}")
+        // Set default locale to Vietnamese
+        var appLocale by mutableStateOf("vi-VN")
         var darkMode by mutableStateOf("FollowSystem")
         var dynamicColor by mutableStateOf(false)
         var lightThemeName by mutableStateOf("light_default")
@@ -68,8 +70,19 @@ class MainActivity : ComponentActivity() {
                 .collect { value ->
                     val locale = Resources.getSystem().configuration.locales[0]
                     val systemLocale = "${locale.language}-${locale.country}"
-                    appLocale = if (value.isNullOrBlank() || value == "none") systemLocale
-                    else value
+                    
+                    // Logic:
+                    // 1. If value is set (user chose specific language), use it.
+                    // 2. If value is "none" or empty (first install/reset):
+                    //    - Check system locale. If system is Vietnamese, use system (vi-VN).
+                    //    - Otherwise, default to Vietnamese (vi-VN) instead of system locale.
+                    
+                    appLocale = if (!value.isNullOrBlank() && value != "none") {
+                        value
+                    } else {
+                        // Default to Vietnamese if not set
+                        "vi-VN"
+                    }
                 }
         }
 
@@ -113,6 +126,7 @@ class MainActivity : ComponentActivity() {
                 darkThemeName = darkThemeName
             ) {
                 LightNovelReaderApp(
+                    tokenStorage = tokenStorage,
                     onBuildNavHost = {
                         // Plugin system removed - no custom navigation routes
                     }

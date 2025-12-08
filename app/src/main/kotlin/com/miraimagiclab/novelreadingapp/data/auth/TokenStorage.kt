@@ -100,6 +100,14 @@ class TokenStorage @Inject constructor(
         return !accessToken.isNullOrEmpty() && !refreshToken.isNullOrEmpty()
     }
 
+    fun setOnboardingComplete() {
+        encryptedPrefs.edit().putBoolean(KEY_ONBOARDING_COMPLETE, true).apply()
+    }
+
+    fun hasCompletedOnboarding(): Boolean {
+        return encryptedPrefs.getBoolean(KEY_ONBOARDING_COMPLETE, false)
+    }
+
     companion object {
         private const val PREFS_NAME = "auth_prefs_encrypted"
         private const val KEY_ACCESS_TOKEN = "access_token"
@@ -108,5 +116,6 @@ class TokenStorage @Inject constructor(
         private const val KEY_USER_ID = "user_id"
         private const val KEY_USERNAME = "username"
         private const val KEY_EMAIL = "email"
+        private const val KEY_ONBOARDING_COMPLETE = "onboarding_complete"
     }
 }

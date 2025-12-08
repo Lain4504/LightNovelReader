@@ -84,6 +84,7 @@ type Mutation {
     updateBanStatus(userId: ID!, banned: Boolean!): StatusUpdateResult
     updateProfile(updateProfileInput: UpdateProfileInput!): ProfileUpdateResult
     updateDisplayName(displayName: String!): ProfileUpdateResult
+    becomeAuthor: RoleUpdateResult
 
     # Image mutations
     deleteImage(id: ID!): ImageUploadResult

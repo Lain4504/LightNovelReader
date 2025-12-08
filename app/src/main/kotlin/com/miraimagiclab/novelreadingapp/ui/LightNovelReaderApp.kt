@@ -13,6 +13,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.rememberNavController
 import com.miraimagiclab.novelreadingapp.R
+import com.miraimagiclab.novelreadingapp.data.auth.TokenStorage
 import com.miraimagiclab.novelreadingapp.ui.dialog.UpdatesAvailableDialogViewModel
 import com.miraimagiclab.novelreadingapp.ui.navigation.LightNovelReaderNavHost
 import com.miraimagiclab.novelreadingapp.utils.showSnackbar
@@ -21,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun LightNovelReaderApp(
+    tokenStorage: TokenStorage,
     onBuildNavHost: NavGraphBuilder.() -> Unit
 ) {
     val navController = rememberNavController()
@@ -48,5 +50,5 @@ fun LightNovelReaderApp(
         }
     }
     
-    LightNovelReaderNavHost(navController, onBuildNavHost)
+    LightNovelReaderNavHost(navController, tokenStorage, onBuildNavHost)
 }
