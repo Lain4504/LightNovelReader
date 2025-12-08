@@ -17,7 +17,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.miraimagiclab.novelreadingapp.data.auth.TokenStorage
 import com.miraimagiclab.novelreadingapp.data.logging.LoggerRepository
 import com.miraimagiclab.novelreadingapp.data.update.InAppUpdateRepository
 import com.miraimagiclab.novelreadingapp.data.userdata.UserDataRepository
